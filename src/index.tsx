@@ -1,16 +1,44 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React, { Fragment, useState } from "react";
+import ReactDOM from "react-dom";
 
+type FromElem = React.FormEvent<HTMLFormElement>
+
+interface ITtodo {
+    text: string
+    complete: boolean
+}
 export default function App(): JSX.Element {
-    const sum = (a:number, b:number):number =>  a + b
-    
-    return (
-        <h1>
-        hello underworld!!{sum(15,15)}
-        </h1>
-    )
+    const [value, setValue] = useState<string>('')
+    const [todos, setTodos] = useState<ITtodo[]>([])
+
+    const handleSubmit = (e:FromElem):void => {
+        e.preventDefault()
+        addTodo(value)
+        setValue('')
+    }
+
+    const addTodo = (text: string) => {
+        const newTodos: ITtodo[] = [...todos, {text, complete: false}]
+        setTodos(newTodos)
+    }
+
+    console.log(todos)
+  return (
+    <Fragment>
+      <h1>Todo List</h1>
+      <form onSubmit={handleSubmit}>
+        <input type="text" value={value} onChange={e => setValue(e.target.value)} required />
+        <button type="submit">Add Todo</button>
+      </form>
+      <section>
+          {todos.map((todo:ITtodo, index:number) => {
+             return <div key={index}>{todo.text}</div>
+          })}
+      </section>
+    </Fragment>
+  );
 }
 
-const root = document.getElementById('app-root')
+const root = document.getElementById("app-root");
 
-ReactDOM.render(<App />, root)
+ReactDOM.render(<App />, root);
