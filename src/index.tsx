@@ -28,6 +28,12 @@ export default function App(): JSX.Element {
     setTodos(newTodos);
   };
 
+  const removeTodo = (index: number):void => {
+    const newTodos: ITtodo[] = [...todos];
+    newTodos.splice(index, 1) // [0,1,2,3].splice(2,1)
+    setTodos(newTodos);
+  }
+
   return (
     <Fragment>
       <h1>Todo List</h1>
@@ -42,12 +48,13 @@ export default function App(): JSX.Element {
       </form>
       <section>
         {todos.map((todo: ITtodo, index: number) => (
-          <Fragment>
+          <Fragment key={index}>
             <div style={{textDecoration: todo.complete ? 'line-through' : ''}}>{todo.text}</div>
             <button type="button" onClick={() => completeTodo(index)}>
               {" "}
               {todo.complete ? "Incomplete" : "Complete"}{' '}
             </button>
+            <button type="button" onClick={() =>removeTodo(index)}>&times;</button>
           </Fragment>
         ))}
       </section>
